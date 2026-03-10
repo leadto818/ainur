@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "source_system": "codex",
+    "target_system": "chatgpt",
+    "project": {
+      "slug": "tvt",
+      "name": "TVT"
+    },
+    "thread": {
+      "slug": "openclaw-agent-dualtrack",
+      "name": "TVT-OpenClaw-Agent 双轨文件流"
+    },
+    "document": {
+      "slug": "tvt-openclaw-agent-dualtrack-v1",
+      "name": "TVT-OpenClaw-Agent 双轨文件流 + ChatGPT/Codex 闭环流程",
+      "version": "1.0"
+    },
+    "execution": {
+      "task_type": "bootstrap_handoff",
+      "task_id": "codex-bootstrap-001",
+      "executed_at": "2026-03-08T19:50:00+08:00",
+      "status": "success",
+      "orchestrator": "codex"
+    },
+    "input_refs": {
+      "task": "../20-codex-in/tvt-openclaw-agent-dualtrack-v1.task.json",
+      "envelope": "../10-validated/tvt-openclaw-agent-dualtrack-v1.envelope.json"
+    }
+  },
+  "payload": {
+    "summary": "Codex 已完成 TVT 双轨 handoff 的目录初始化、源文档落盘、envelope 生成与结果回传文件准备。",
+    "artifacts": [
+      {
+        "type": "markdown",
+        "path": "./tvt-openclaw-agent-dualtrack-v1.result.md"
+      },
+      {
+        "type": "markdown",
+        "path": "./tvt-openclaw-agent-dualtrack-v1.chatgpt-return.md"
+      }
+    ]
+  }
+}

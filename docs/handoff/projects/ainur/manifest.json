@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "slug": "ainur",
+    "name": "ainur",
+    "workspace": "/Users/yannian/ainur"
+  },
+  "threads": [
+    {
+      "slug": "multi-agents-workflow",
+      "name": "设计 multi-agents 工作流",
+      "latest_document": "multi-agents-workflow-backup-20260308-202041"
+    }
+  ]
+}

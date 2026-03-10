@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "task_type": "incremental_backup",
+  "project": {
+    "slug": "ainur",
+    "name": "ainur"
+  },
+  "thread": {
+    "slug": "codex-other-app-integration",
+    "name": "codex和其他app的对接"
+  },
+  "document": {
+    "slug": "codex-other-app-integration-backup-20260308-201421",
+    "name": "codex和其他app的对接 对话增量备份",
+    "version": "1.0"
+  },
+  "input_envelope": "../10-validated/codex-other-app-integration-backup-20260308-201421.envelope.json",
+  "expected_outputs": [
+    "../30-codex-out/codex-other-app-integration-backup-20260308-201421.chatgpt-return.md"
+  ],
+  "created_at": "2026-03-08T20:14:22+08:00",
+  "status": "completed",
+  "based_on": "codex-other-app-integration-backup-20260308-195610.md"
+}

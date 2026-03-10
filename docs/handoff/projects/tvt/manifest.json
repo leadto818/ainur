@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "slug": "tvt",
+    "name": "TVT",
+    "workspace": "/Users/yannian/ainur"
+  },
+  "threads": [
+    {
+      "slug": "tvt-openclaw-current-thread",
+      "name": "TVT OpenClaw current thread",
+      "latest_document": "tvt-openclaw-current-thread-backup-2026-03-08"
+    }
+  ]
+}

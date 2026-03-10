@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "task_type": "incremental_backup",
+  "project": {
+    "slug": "tvt",
+    "name": "TVT"
+  },
+  "thread": {
+    "slug": "tvt-openclaw-current-thread",
+    "name": "TVT OpenClaw Current Thread"
+  },
+  "document": {
+    "slug": "tvt-openclaw-current-thread-backup-20260309-005437",
+    "name": "TVT OpenClaw Current Thread 对话增量备份",
+    "version": "1.0"
+  },
+  "input_envelope": "../10-validated/tvt-openclaw-current-thread-backup-20260309-005437.envelope.json",
+  "expected_outputs": [
+    "../30-codex-out/tvt-openclaw-current-thread-backup-20260309-005437.chatgpt-return.md"
+  ],
+  "created_at": "2026-03-09T00:54:38+08:00",
+  "status": "completed",
+  "based_on": "tvt-openclaw-current-thread-backup-2026-03-08.md"
+}

@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "source_system": "chatgpt",
+    "target_system": "codex",
+    "project": {
+      "slug": "tvt",
+      "name": "TVT"
+    },
+    "thread": {
+      "slug": "openclaw-agent-dualtrack",
+      "name": "TVT-OpenClaw-Agent 双轨文件流"
+    },
+    "document": {
+      "slug": "tvt-openclaw-agent-dualtrack-v1",
+      "name": "TVT-OpenClaw-Agent 双轨文件流 + ChatGPT/Codex 闭环流程",
+      "version": "1.0",
+      "created_at": "2026-03-08T19:48:06+08:00",
+      "content_format": "markdown-blocks"
+    }
+  },
+  "payload": {
+    "blocks": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "TVT-OpenClaw-Agent 双轨文件流 + ChatGPT/Codex 闭环流程"
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "总体说明"
+      },
+      {
+        "type": "paragraph",
+        "text": "这份文档说明了 TVT Agent 项目中 ChatGPT 与 Codex/OpenClaw 双轨文件流的设计，包含 Markdown 人类可读文档、JSON envelope 交接、任务驱动、结果回传及归档机制。"
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "流程图"
+      },
+      {
+        "type": "mermaid",
+        "language": "mermaid",
+        "code": "flowchart LR\n    subgraph ChatGPT\n    CG[ChatGPT 生成 Markdown & JSON envelope]\n    CV[校验 & 放入 10-validated]\n    end\n\n    subgraph Codex/OpenClaw\n    CI[读取 20-codex-in 任务]\n    EX[执行任务，调用 Agents]\n    CO[输出结果 .result.md + .result.json]\n    end\n\n    subgraph Archive\n    AR[归档快照到 40-archive]\n    end\n\n    CG --> CV --> CI --> EX --> CO --> AR\n    CO --> CG[回传到 ChatGPT 可视化 / Orchestrator]"
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "流程说明"
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "1. ChatGPT 生成文档"
+      },
+      {
+        "type": "list",
+        "items": [
+          "输出 Markdown (`00-source/*.md`) 供人类审阅",
+          "输出 JSON envelope (`00-source/*.envelope.json`) 供 Codex 消费",
+          "包含 block 类型：heading, paragraph, list, code, mermaid, table"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "2. 校验阶段"
+      },
+      {
+        "type": "list",
+        "items": [
+          "检查必填字段完整性：project, thread, document metadata",
+          "校验 block 类型合法",
+          "校验代码块和 Mermaid 块闭合",
+          "校验通过后放入 `10-validated/`"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "3. Codex 任务生成"
+      },
+      {
+        "type": "list",
+        "items": [
+          "建立 `.task.json` 描述文件放入 `20-codex-in/`",
+          "内容示例："
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "code": "{\n  \"task_type\": \"ingest_document\",\n  \"input_envelope\": \"../10-validated/tvt-openclaw-agent-dualtrack-v1.envelope.json\",\n  \"expected_outputs\": [\n    \"../30-codex-out/tvt-openclaw-agent-dualtrack-v1.result.md\",\n    \"../30-codex-out/tvt-openclaw-agent-dualtrack-v1.result.json\"\n  ]\n}"
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "4. Codex 执行"
+      },
+      {
+        "type": "list",
+        "items": [
+          "读取 task.json",
+          "消费 envelope 执行 Agents 调用",
+          "输出两份结果：人类可读 `.result.md` + 机器可解析 `.result.json`",
+          "`.result.json` 增加 execution metadata：codex_task_id, executed_at, status, orchestrator"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "5. ChatGPT 消费结果"
+      },
+      {
+        "type": "list",
+        "items": [
+          "读取 `.result.json` 生成对话渲染",
+          "可以嵌入对话或 Orchestrator 控制循环",
+          "支持多轮 Agent 调度及策略迭代"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "6. 归档"
+      },
+      {
+        "type": "list",
+        "items": [
+          "完整快照存入 `40-archive/`",
+          "保留每次任务输入、输出和校验版本"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "建议目录结构"
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "code": "docs/\n  handoff/\n    projects/tvt/\n      manifest.json\n      threads/openclaw-agent-dualtrack/\n        00-source/\n          tvt-openclaw-agent-dualtrack-v1.md\n          tvt-openclaw-agent-dualtrack-v1.envelope.json\n        10-validated/\n          tvt-openclaw-agent-dualtrack-v1.envelope.json\n        20-codex-in/\n          tvt-openclaw-agent-dualtrack-v1.task.json\n        30-codex-out/\n          tvt-openclaw-agent-dualtrack-v1.result.md\n          tvt-openclaw-agent-dualtrack-v1.result.json\n        40-archive/\n          tvt-openclaw-agent-dualtrack-v1.snapshot.md"
+      }
+    ]
+  }
+}
